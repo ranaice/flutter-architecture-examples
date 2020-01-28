@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shop_cart_no_arch/item_detail.dart';
-import 'package:shop_cart_no_arch/shop_cart_screen.dart';
+import 'package:shop_cart_no_arch/screens/item_detail.dart';
+import 'package:shop_cart_no_arch/screens/shop_cart_screen.dart';
 import 'package:shop_cart_no_arch/shop_item.dart';
 
 class ItemsScreen extends StatefulWidget {
