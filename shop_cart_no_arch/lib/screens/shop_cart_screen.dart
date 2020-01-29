@@ -12,16 +12,28 @@ class ShopCartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Cart'),
       ),
-      body: Center(
-        child: ListView.builder(
-            itemCount: shopItems.length,
-            itemBuilder: (context, index) {
-              final item = shopItems[index];
-              return ListTile(
-                title: Text('${item.name}'),
-              );
-            }),
-      ),
+      body: shopItems.length == 0
+          ? _emptyText()
+          : Center(
+              child: ListView.builder(
+                  itemCount: shopItems.length,
+                  itemBuilder: (context, index) {
+                    final item = shopItems[index];
+                    return ListTile(
+                      title: Text('${item.name}'),
+                    );
+                  }),
+            ),
     );
+  }
+
+  Center _emptyText() {
+    return Center(
+        child: Text(
+      'No items added to the cart. :(',
+      style: TextStyle(
+        fontSize: 18,
+      ),
+    ));
   }
 }

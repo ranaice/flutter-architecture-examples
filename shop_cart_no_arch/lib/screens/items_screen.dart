@@ -46,13 +46,33 @@ class _ItemsScreenState extends State<ItemsScreen> {
     return AppBar(
       title: Text('Items'),
       actions: <Widget>[
-        IconButton(
-          onPressed: _onTapShopCart,
-          icon: Icon(
-            Icons.add_shopping_cart,
-            color: Colors.white,
-          ),
-        )
+        Stack(
+          alignment: Alignment(0.7, 0.8),
+          fit: StackFit.loose,
+          children: <Widget>[
+            IconButton(
+              onPressed: _onTapShopCart,
+              icon: Icon(
+                Icons.add_shopping_cart,
+                color: Colors.white,
+              ),
+            ),
+            Positioned(
+              bottom: 1,
+              right: 1,
+              child: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red[400]),
+                child: Center(
+                  child: Text(
+                    shopItems.where((shopItem) => shopItem.addedToCart).toList().length.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
