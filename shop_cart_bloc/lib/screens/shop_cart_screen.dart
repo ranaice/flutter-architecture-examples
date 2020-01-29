@@ -11,26 +11,32 @@ class ShopCartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Cart'),
       ),
-      body: Center(
-        child: ListView.builder(
-          itemCount: bloc.shopCart.length,
-          itemBuilder: (context, index) {
-            final item = bloc.shopCart[index];
+      body: bloc.shopCart.length == 0 ? _emptyText() : _listItem(bloc),
+    );
+  }
 
-            return ListTile(
-              title: Text('${item.name}'),
-            );
-          },
-        ),
+  Center _listItem(CartBloc bloc) {
+    return Center(
+      child: ListView.builder(
+        itemCount: bloc.shopCart.length,
+        itemBuilder: (context, index) {
+          final item = bloc.shopCart[index];
+
+          return ListTile(
+            title: Text('${item.name}'),
+          );
+        },
       ),
     );
   }
 
-  Center _errorText(AsyncSnapshot snapshot) {
+  Center _emptyText() {
     return Center(
         child: Text(
-      'Problems: ${snapshot.error}',
-      style: TextStyle(color: Colors.red),
+      'No items added to the cart. :(',
+      style: TextStyle(
+        fontSize: 18,
+      ),
     ));
   }
 }
