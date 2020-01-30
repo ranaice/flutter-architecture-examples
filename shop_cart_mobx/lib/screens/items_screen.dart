@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_cart_mobx/screens/shop_cart_screen.dart';
+import 'package:shop_cart_mobx/store/cart_model.dart';
+import 'package:shop_cart_mobx/store/catalog_model.dart';
 
 import '../shop_item.dart';
-import 'item_detail.dart';
 
 class ItemsScreen extends StatefulWidget {
   @override
@@ -10,34 +12,23 @@ class ItemsScreen extends StatefulWidget {
 }
 
 class _ItemsScreenState extends State<ItemsScreen> {
-  final List<ShopItem> shopItems = [
-    ShopItem(name: 'Shirt', image: 'https://images-na.ssl-images-amazon.com/images/I/41xCWDx-OyL.jpg'),
-    ShopItem(
-        name: 'Shoes',
-        image:
-            'https://rukminim1.flixcart.com/image/714/857/jmwch3k0/shoe/j/y/n/dg-292-white-blue-patti-10-digitrendzz-white-original-imaf9p36fkykfjqt.jpeg?q=50'),
-    ShopItem(name: 'Blanket', image: 'https://images-na.ssl-images-amazon.com/images/I/71THWcYwDML._AC_SY450_.jpg'),
-    ShopItem(name: 'TV', image: 'https://http2.mlstatic.com/D_NQ_NP_986822-MLA31521904233_072019-W.jpg'),
-    ShopItem(name: 'Smartphone', image: 'https://imagens.canaltech.com.br/produto/1540320629-3958-principal-m.png'),
-    ShopItem(
-        name: 'PS4',
-        image:
-            'https://http2.mlstatic.com/console-ps4-pro-4k-1-tb-novo-original-sony-7215-D_NQ_NP_852066-MLB31072431446_062019-F.jpg'),
-    ShopItem(
-        name: 'XBOX',
-        image: 'https://i.zst.com.br/images/console-xbox-one-s-1-tb-microsoft-hdr-4k-photo131312234-12-3d-14.jpg'),
-    ShopItem(name: 'Mousepad', image: 'https://images9.kabum.com.br/produtos/fotos/79279/79279_1502734852_g.jpg'),
-    ShopItem(name: 'Keyboard', image: 'https://cwsmgmt.corsair.com/media/hybris/tlc/keyboards/TLC_keyboard_banner.jpg'),
-  ];
+  CartModel _cartModel;
+  final CatalogModel _catalogModel = CatalogModel();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cartModel = Provider.of<CartModel>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ListView.builder(
-          itemCount: shopItems.length,
+          itemCount: _catalogModel.catalogSize,
           itemBuilder: (_, index) {
-            final item = shopItems[index];
+            final item = _catalogModel.catalog[index];
             return _listItem(item);
           }),
     );
@@ -66,7 +57,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red[400]),
                 child: Center(
                   child: Text(
-                    shopItems.where((shopItem) => shopItem.addedToCart).toList().length.toString(),
+                    _cartModel.numOfItemsOnCart.toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -81,36 +72,29 @@ class _ItemsScreenState extends State<ItemsScreen> {
   _listItem(ShopItem item) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => _onTapListItem(item),
-        child: ListTile(
-          leading: Hero(
-            tag: 'shop-cart-${item.name}',
-            child: Image.network(
-              item.image,
-              width: 60,
-            ),
+      child: ListTile(
+        leading: Hero(
+          tag: 'shop-cart-${item.name}',
+          child: Image.network(
+            item.image,
+            width: 60,
           ),
-          title: Text(item.name),
-          trailing: Checkbox(
-              value: item.addedToCart,
-              onChanged: (newValue) {
-                setState(() {
-                  item.addedToCart = newValue;
-                });
-              }),
         ),
+        title: Text(item.name),
+        trailing: Checkbox(
+            value: item.addedToCart,
+            onChanged: (newValue) {
+              setState(() {
+                _catalogModel.setAddedToCart(item, newValue);
+                item.addedToCart = newValue;
+                newValue ? _cartModel.addToCart(item) : _cartModel.removeFromCart(item);
+              });
+            }),
       ),
     );
   }
 
-  _onTapListItem(item) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ItemDetailScreen(item)));
-  }
-
   _onTapShopCart() async {
-    final addedItems = shopItems.where((shopItem) => shopItem.addedToCart).toList();
-    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => ShopCartScreen(addedItems)));
-    shopItems.forEach((item) => item.addedToCart = false);
+    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => ShopCartScreen()));
   }
 }

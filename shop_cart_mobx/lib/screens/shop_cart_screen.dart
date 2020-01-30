@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-
-import '../shop_item.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_cart_mobx/store/cart_model.dart';
 
 class ShopCartScreen extends StatelessWidget {
-  final List<ShopItem> shopItems;
-
-  ShopCartScreen(this.shopItems);
-
   @override
   Widget build(BuildContext context) {
+    var model = Provider.of<CartModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Cart'),
       ),
-      body: shopItems.length == 0
+      body: model.shopCart.length == 0
           ? _emptyText()
           : Center(
               child: ListView.builder(
-                  itemCount: shopItems.length,
+                  itemCount: model.shopCart.length,
                   itemBuilder: (context, index) {
-                    final item = shopItems[index];
+                    final item = model.shopCart[index];
                     return ListTile(
                       title: Text('${item.name}'),
                     );
