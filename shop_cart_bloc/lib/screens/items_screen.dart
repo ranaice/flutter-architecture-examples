@@ -12,6 +12,14 @@ class ItemsScreen extends StatefulWidget {
 
 class _ItemsScreenState extends State<ItemsScreen> {
   final itemsBloc = ItemsBloc();
+  CartBloc cartBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve the bloc provided by BlocProvider whenever needed down the widget tree
+    cartBloc = BlocProvider.of<CartBloc>(context);
+  }
 
   @override
   void dispose() {
@@ -38,9 +46,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
   }
 
   AppBar _buildAppBar() {
-    // Retrieve the bloc provided by BlocProvider whenever needed down the widget tree
-    final CartBloc cartBloc = BlocProvider.of<CartBloc>(context);
-
     return AppBar(
       title: Text('Items'),
       actions: <Widget>[
@@ -82,7 +87,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
   }
 
   _listItem(ShopItem item) {
-    final CartBloc cartBloc = BlocProvider.of<CartBloc>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(

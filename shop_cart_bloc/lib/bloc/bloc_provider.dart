@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Every bloc will have to extend this class so it can close the streams.
+// https://www.didierboelens.com/2018/12/reactive-programming---streams---bloc---practical-use-cases/
 abstract class BlocBase {
   void dispose();
 }
@@ -24,9 +25,8 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
 
   // This 'of' method is just a convenient method to provide the bloc to the widgets down the tree
   static T of<T extends BlocBase>(BuildContext context) {
-    _BlocProviderInherited<T> provider = context
-        .getElementForInheritedWidgetOfExactType<_BlocProviderInherited<T>>()
-        ?.widget;
+    _BlocProviderInherited<T> provider =
+        context.getElementForInheritedWidgetOfExactType<_BlocProviderInherited<T>>()?.widget;
     return provider?.bloc;
   }
 }
