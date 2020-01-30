@@ -30,6 +30,9 @@ abstract class CatalogModelBase with Store {
   @computed
   int get catalogSize => catalog.length;
 
+  @computed
+  List<ShopItem> get shopCart => catalog.where((shopItem) => shopItem.addedToCart).toList();
+
   @action
   setAddedToCart(ShopItem item, bool value) {
     item.addedToCart = value;

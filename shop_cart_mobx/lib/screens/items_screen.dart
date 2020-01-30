@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_cart_mobx/screens/shop_cart_screen.dart';
-import 'package:shop_cart_mobx/store/cart_model.dart';
 import 'package:shop_cart_mobx/store/catalog_model.dart';
 
 import '../shop_item.dart';
@@ -12,13 +11,12 @@ class ItemsScreen extends StatefulWidget {
 }
 
 class _ItemsScreenState extends State<ItemsScreen> {
-  CartModel _cartModel;
-  final CatalogModel _catalogModel = CatalogModel();
+  CatalogModel _catalogModel;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _cartModel = Provider.of<CartModel>(context);
+    _catalogModel = Provider.of<CatalogModel>(context);
   }
 
   @override
@@ -57,7 +55,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red[400]),
                 child: Center(
                   child: Text(
-                    _cartModel.numOfItemsOnCart.toString(),
+                    _catalogModel.shopCart.length.toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -86,8 +84,6 @@ class _ItemsScreenState extends State<ItemsScreen> {
             onChanged: (newValue) {
               setState(() {
                 _catalogModel.setAddedToCart(item, newValue);
-                item.addedToCart = newValue;
-                newValue ? _cartModel.addToCart(item) : _cartModel.removeFromCart(item);
               });
             }),
       ),
