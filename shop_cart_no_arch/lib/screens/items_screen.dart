@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shop_cart_no_arch/screens/item_detail.dart';
 import 'package:shop_cart_no_arch/screens/shop_cart_screen.dart';
 import 'package:shop_cart_no_arch/shop_item.dart';
 
@@ -80,31 +79,24 @@ class _ItemsScreenState extends State<ItemsScreen> {
   _listItem(ShopItem item) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => _onTapListItem(item),
-        child: ListTile(
-          leading: Hero(
-            tag: 'shop-cart-${item.name}',
-            child: Image.network(
-              item.image,
-              width: 60,
-            ),
+      child: ListTile(
+        leading: Hero(
+          tag: 'shop-cart-${item.name}',
+          child: Image.network(
+            item.image,
+            width: 60,
           ),
-          title: Text(item.name),
-          trailing: Checkbox(
-              value: item.addedToCart,
-              onChanged: (newValue) {
-                setState(() {
-                  item.addedToCart = newValue;
-                });
-              }),
         ),
+        title: Text(item.name),
+        trailing: Checkbox(
+            value: item.addedToCart,
+            onChanged: (newValue) {
+              setState(() {
+                item.addedToCart = newValue;
+              });
+            }),
       ),
     );
-  }
-
-  _onTapListItem(item) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ItemDetailScreen(item)));
   }
 
   _onTapShopCart() async {
