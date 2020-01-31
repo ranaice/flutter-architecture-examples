@@ -69,7 +69,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
                   right: 1,
                   child: Container(
                     padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red[400]),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.red[400]),
                     child: Center(
                       child: Text(
                         snapshot.data.length.toString(),
@@ -106,6 +107,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
   }
 
   _onTapShopCart() async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => ShopCartScreen()));
+    await Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => ShopCartScreen()));
   }
 }
